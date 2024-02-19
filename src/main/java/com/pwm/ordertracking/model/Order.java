@@ -1,7 +1,6 @@
 package com.pwm.ordertracking.model;
 
-import java.security.SecureRandom;
-
+import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,25 +10,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "orders")
 public class Order {
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final SecureRandom RANDOM = new SecureRandom();
     
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotBlank
+	@Size(max = 100)
 	@Column(name = "custome_name")
 	private String customerName;
 
+	@Size(max = 100)
 	@Column(name = "shipping_address")
 	private String shippingAddress;
 
+	@Size(max = 100)
 	@Column(name = "amazon_order_id")
 	private String amazonOrderId;
 
@@ -51,13 +52,14 @@ public class Order {
 		this.orderStatus = orderStatus;
 		generateTrackingId();
 	}
-
+	
 	public String getCustomerName() {
 		return customerName;
 	}
 
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+		
 	}
 
 	public String getShippingAddress() {
@@ -96,17 +98,11 @@ public class Order {
 		this.trackingId = trackingId;
 	}
 
-	// Method to generate tracking ID with the ID appended
 	private void generateTrackingId() {
-		this.trackingId = "TR-"+generateRandomString(5)+"-"+id;
+
+		this.trackingId = UUID.randomUUID().toString();
 	}
 	
-	private String generateRandomString(int length) {
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < 5; i++) {
-            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
-        }
-        return sb.toString();
-    }
+
 
 }

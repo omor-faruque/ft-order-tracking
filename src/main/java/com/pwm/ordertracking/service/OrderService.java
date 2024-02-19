@@ -29,5 +29,9 @@ public class OrderService {
 		return orderRepository.save(orderEntity);
 	}
 	
+	public void deleteOrderById(Long id) {
+		this.orderRepository.deleteById(id);
+	}
+	
 
 }
