@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pwm.ordertracking.model.Order;
 import com.pwm.ordertracking.repository.OrderRepository;
 
+
 @Service
 public class OrderService {
 	private final OrderRepository orderRepository;
@@ -23,7 +24,7 @@ public class OrderService {
 	public Order createOrder(Order order) {
 		Order orderEntity = new Order();
 		orderEntity.setCustomerName(order.getCustomerName());
-		orderEntity.setAmazonOrderId(order.getAmazonOrderId());
+		orderEntity.setSourceOrderId(order.getSourceOrderId());
 		orderEntity.setShippingAddress(order.getShippingAddress());
 		orderEntity.setOrderStatus(order.getOrderStatus());
 		return orderRepository.save(orderEntity);

@@ -30,9 +30,10 @@ public class Order {
 	@Column(name = "shipping_address")
 	private String shippingAddress;
 
+	@NotBlank
 	@Size(max = 100)
-	@Column(name = "amazon_order_id")
-	private String amazonOrderId;
+	@Column(name = "sourde_order_id")
+	private String sourceOrderId;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "order_status")
@@ -45,10 +46,10 @@ public class Order {
 		generateTrackingId();
 	}
 
-	public Order(String customerName, String shippingAddress, String amazonOrderId, OrderStatus orderStatus) {
+	public Order(String customerName, String shippingAddress, String sourceOrderId, OrderStatus orderStatus) {
 		this.customerName = customerName;
 		this.shippingAddress = shippingAddress;
-		this.amazonOrderId = amazonOrderId;
+		this.sourceOrderId = sourceOrderId;
 		this.orderStatus = orderStatus;
 		generateTrackingId();
 	}
@@ -70,12 +71,12 @@ public class Order {
 		this.shippingAddress = shippingAddress;
 	}
 
-	public String getAmazonOrderId() {
-		return amazonOrderId;
+	public String getSourceOrderId() {
+		return sourceOrderId;
 	}
 
-	public void setAmazonOrderId(String amazonOrderId) {
-		this.amazonOrderId = amazonOrderId;
+	public void setSourceOrderId(String sourceOrderId) {
+		this.sourceOrderId = sourceOrderId;
 	}
 
 	public OrderStatus getOrderStatus() {

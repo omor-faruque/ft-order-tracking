@@ -8,13 +8,13 @@ public enum OrderStatus {
 	DELIVERED("Delivered"), 
 	CANCELLED("Cancelled");
 
-	private final String statusName;
+	private final String displayName;
 
-	OrderStatus(String statusName) {
-		this.statusName = statusName;
+	OrderStatus(String displayName) {
+		this.displayName = displayName;
 	}
 
-	public String getStatusName() {
-		return statusName;
+	public String getDisplayName() {
+		return displayName;
 	}
 }
