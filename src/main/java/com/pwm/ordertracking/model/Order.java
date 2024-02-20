@@ -1,6 +1,5 @@
 package com.pwm.ordertracking.model;
 
-import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +15,6 @@ import jakarta.validation.constraints.Size;
 @Table(name = "orders")
 public class Order {
 
-    
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -42,8 +40,7 @@ public class Order {
 	@Column(name = "tracking_id")
 	private String trackingId;
 
-	public Order() {
-		generateTrackingId();
+	public Order() {	
 	}
 
 	public Order(String customerName, String shippingAddress, String sourceOrderId, OrderStatus orderStatus) {
@@ -77,6 +74,7 @@ public class Order {
 
 	public void setSourceOrderId(String sourceOrderId) {
 		this.sourceOrderId = sourceOrderId;
+		generateTrackingId();
 	}
 
 	public OrderStatus getOrderStatus() {
@@ -95,13 +93,8 @@ public class Order {
 		return trackingId;
 	}
 
-	public void setTrackingId(String trackingId) {
-		this.trackingId = trackingId;
-	}
-
 	private void generateTrackingId() {
-
-		this.trackingId = UUID.randomUUID().toString();
+		this.trackingId ="TR"+this.sourceOrderId;
 	}
 	
 
