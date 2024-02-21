@@ -20,12 +20,16 @@ public class OrderService {
 	public List<Order> getOrders() {
 		return orderRepository.findAll();
 	}
+	
+	public List<Order> getOrdersWithStatus(OrderStatus status) {
+		return orderRepository.findByOrderStatus(status);
+	}
+	
+
 
 	public Order createOrder(Order order) {
 		
-		Order orderEntity = new Order();
-		orderEntity.setCustomerName(order.getCustomerName());
-		orderEntity.setSourceOrderId(order.getSourceOrderId());
+		Order orderEntity = new Order(order.getCustomerName(),order.getSourceOrderId());
 		orderEntity.setShippingAddress(order.getShippingAddress());
 		if (isValidOrderStatus(order.getOrderStatus())) {
 			orderEntity.setOrderStatus(order.getOrderStatus());
