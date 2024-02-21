@@ -3,6 +3,7 @@ package com.pwm.ordertracking.exception;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
 		ErrorResponse er = new ErrorResponse(new Date(), "Validation failed", HttpStatus.BAD_REQUEST, errors);
 
 		return new ResponseEntity<>(er, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(NoSuchElementException.class)
+	public ResponseEntity<ErrorItem> handleNoSuchElementException(NoSuchElementException ex) {
+		ErrorItem errorItem = new ErrorItem(new Date(), ex.getMessage(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorItem, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
