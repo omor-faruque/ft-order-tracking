@@ -1,7 +1,6 @@
 package com.pwm.ordertracking.model;
 
 public enum OrderStatus {
-	PENDING("Pending"), 
 	PROCESSING("Processing"), 
 	SHIPPED("Shipped"), 
 	OUT_FOR_DELIVERY("Out For Delivery"),

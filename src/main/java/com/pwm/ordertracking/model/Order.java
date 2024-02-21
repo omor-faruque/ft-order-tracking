@@ -39,15 +39,12 @@ public class Order {
 
 	@Column(name = "tracking_id")
 	private String trackingId;
+	
+	public Order() {}
 
-	public Order() {	
-	}
-
-	public Order(String customerName, String shippingAddress, String sourceOrderId, OrderStatus orderStatus) {
+	public Order(String customerName, String sourceOrderId) {
 		this.customerName = customerName;
-		this.shippingAddress = shippingAddress;
 		this.sourceOrderId = sourceOrderId;
-		this.orderStatus = orderStatus;
 		generateTrackingId();
 	}
 	
