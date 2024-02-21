@@ -1,6 +1,9 @@
 package com.pwm.ordertracking.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,24 +23,33 @@ public class OrderService {
 	public List<Order> getOrders() {
 		return orderRepository.findAll();
 	}
-	
+
 	public List<Order> getOrdersWithStatus(OrderStatus status) {
 		return orderRepository.findByOrderStatus(status);
 	}
-	
 
+	public Order updateOrderStatus(Long orderId, OrderStatus newStatus) {
+		Optional<Order> optionalOrder = orderRepository.findById(orderId);
+
+		if (optionalOrder.isPresent()) {
+			Order order = optionalOrder.get();
+			order.setOrderStatus(newStatus);
+			return orderRepository.save(order);
+		} else {
+			throw new NoSuchElementException("Order not found with ID: " + orderId);
+		}
+	}
 
 	public Order createOrder(Order order) {
-		
-		Order orderEntity = new Order(order.getCustomerName(),order.getSourceOrderId());
+
+		Order orderEntity = new Order(order.getCustomerName(), order.getSourceOrderId());
 		orderEntity.setShippingAddress(order.getShippingAddress());
 		if (isValidOrderStatus(order.getOrderStatus())) {
 			orderEntity.setOrderStatus(order.getOrderStatus());
-		}
-		else {
+		} else {
 			orderEntity.setOrderStatus(OrderStatus.PROCESSING);
 		}
-		
+
 		return orderRepository.save(orderEntity);
 	}
 
