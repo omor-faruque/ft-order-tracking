@@ -12,6 +12,12 @@ Order tracking
 - [Contributing](#contributing)
 - [License](#license)
 
+## Pre-Installation
+Make Sure Database has this two roles before creating any user or before running the app
+
+INSERT INTO ft_ordertracking_schema.roles(name) VALUES('ROLE_USER');
+INSERT INTO ft_ordertracking_schema.roles(name) VALUES('ROLE_ADMIN');
+
 ## Installation
 
 
