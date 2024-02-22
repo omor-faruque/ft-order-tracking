@@ -51,16 +51,23 @@ public class OrderService {
 	}
 
 	public Order createOrder(Order order) {
-
 		Order orderEntity = new Order(order.getCustomerName(), order.getSourceOrderId());
-		orderEntity.setShippingAddress(order.getShippingAddress());
-		if (isValidOrderStatus(order.getOrderStatus())) {
-			orderEntity.setOrderStatus(order.getOrderStatus());
-		} else {
-			orderEntity.setOrderStatus(OrderStatus.PROCESSING);
-		}
+		
+	    if (order.getShippingAddress() != null) {
+	        orderEntity.setShippingAddress(order.getShippingAddress());
+	    }
 
-		return orderRepository.save(orderEntity);
+	    if (order.getNote() != null) {
+	        orderEntity.setNote(order.getNote());
+	    }
+
+	    if (isValidOrderStatus(order.getOrderStatus())) {
+	        orderEntity.setOrderStatus(order.getOrderStatus());
+	    } else {
+	        orderEntity.setOrderStatus(OrderStatus.PROCESSING);
+	    }
+
+	    return orderRepository.save(orderEntity);
 	}
 
 	public void deleteOrderById(Long id) {
