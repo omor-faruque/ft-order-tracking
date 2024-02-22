@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pwm.ordertracking.dto.OrderStatusDTO;
 import com.pwm.ordertracking.model.Order;
 import com.pwm.ordertracking.model.OrderStatus;
 import com.pwm.ordertracking.service.OrderService;
@@ -40,6 +41,17 @@ public class OrderController {
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
 	}
 
+	@GetMapping("/orders/statuses")
+	public List<OrderStatusDTO> getAllOrderStatuses() {
+		return orderService.getAllOrderStatuses();
+	}
+
+	@GetMapping("/orders/status")
+	public ResponseEntity<OrderStatusDTO> getStatusByTrackingId(@RequestParam String trackingId) {
+		OrderStatusDTO orderStatusDto = orderService.getStatusByTrackingId(trackingId);
+		return ResponseEntity.ok(orderStatusDto);
+	}
+
 	@GetMapping("/orders/{status}")
 	public ResponseEntity<List<Order>> getAllOrders(@PathVariable String status) {
 		try {
@@ -60,25 +72,20 @@ public class OrderController {
 	public ResponseEntity<Order> addOrder(@RequestBody Order order) {
 		return new ResponseEntity<Order>(orderService.createOrder(order), HttpStatus.CREATED);
 	}
-	
-	
+
 	@PutMapping("/orders/{orderId}")
-	public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId,  @RequestParam String status) {
+	public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam String status) {
 
-	    try {
-	        OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
-	        Order updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
-	        return ResponseEntity.ok(updatedOrder);
-	    } catch (IllegalArgumentException e) {
-	        throw new IllegalArgumentException("Invalid order status");
-	    } catch (NoSuchElementException e) {
-	        return ResponseEntity.notFound().build();
-	    }
+		try {
+			OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
+			Order updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
+			return ResponseEntity.ok(updatedOrder);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid order status");
+		} catch (NoSuchElementException e) {
+			throw new NoSuchElementException("No such order exists");
+		}
 	}
-
-	
-	
-	
 
 	@DeleteMapping("/orders/{id}")
 	public ResponseEntity<HttpStatus> deleteOrderById(@PathVariable Long id) {

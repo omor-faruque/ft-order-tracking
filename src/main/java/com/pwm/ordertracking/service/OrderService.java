@@ -1,5 +1,6 @@
 package com.pwm.ordertracking.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pwm.ordertracking.dto.OrderStatusDTO;
 import com.pwm.ordertracking.model.Order;
 import com.pwm.ordertracking.model.OrderStatus;
 import com.pwm.ordertracking.repository.OrderRepository;
@@ -24,6 +26,29 @@ public class OrderService {
 		return orderRepository.findAll();
 	}
 
+	public List<OrderStatusDTO> getAllOrderStatuses() {
+
+		List<OrderStatusDTO> orderStatusDTOList = new ArrayList<>();
+
+		for (OrderStatus status : OrderStatus.values()) {
+
+			OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
+
+			orderStatusDTO.setName(status.name());
+			orderStatusDTO.setDisplayName(status.getDisplayName());
+			orderStatusDTOList.add(orderStatusDTO);
+		}
+		return orderStatusDTOList;
+	}
+	public OrderStatusDTO getStatusByTrackingId(String trackingId) {
+		Order order = orderRepository.findByTrackingId(trackingId);
+		
+        if (order != null) {
+            return new OrderStatusDTO(order.getOrderStatus().name(), order.getOrderStatus().getDisplayName()) ;
+        } else {
+            throw new NoSuchElementException("Order with tracking ID " + trackingId + " not found");
+        }
+	}
 	public List<Order> getOrdersWithStatus(OrderStatus status) {
 		return orderRepository.findByOrderStatus(status);
 	}
@@ -41,16 +66,23 @@ public class OrderService {
 	}
 
 	public Order createOrder(Order order) {
-
 		Order orderEntity = new Order(order.getCustomerName(), order.getSourceOrderId());
-		orderEntity.setShippingAddress(order.getShippingAddress());
-		if (isValidOrderStatus(order.getOrderStatus())) {
-			orderEntity.setOrderStatus(order.getOrderStatus());
-		} else {
-			orderEntity.setOrderStatus(OrderStatus.PROCESSING);
-		}
+		
+	    if (order.getShippingAddress() != null) {
+	        orderEntity.setShippingAddress(order.getShippingAddress());
+	    }
 
-		return orderRepository.save(orderEntity);
+	    if (order.getNote() != null) {
+	        orderEntity.setNote(order.getNote());
+	    }
+
+	    if (isValidOrderStatus(order.getOrderStatus())) {
+	        orderEntity.setOrderStatus(order.getOrderStatus());
+	    } else {
+	        orderEntity.setOrderStatus(OrderStatus.PROCESSING);
+	    }
+
+	    return orderRepository.save(orderEntity);
 	}
 
 	public void deleteOrderById(Long id) {

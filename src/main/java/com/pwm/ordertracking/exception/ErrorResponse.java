@@ -10,7 +10,7 @@ public class ErrorResponse extends ErrorItem {
 private List<String> errors;
 	
     public ErrorResponse(Date timestamp, String message, HttpStatus status, List<String> errors) {
-		super(timestamp, message, status);
+		super(message, status);
 		this.errors = errors;
 	}
 

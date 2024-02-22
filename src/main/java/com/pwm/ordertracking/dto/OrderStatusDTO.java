@@ -4,6 +4,13 @@ public class OrderStatusDTO {
 	private String name;
     private String displayName;
     
+    public OrderStatusDTO() {}
+    
+    public OrderStatusDTO(String name, String displayName) {
+    	this.name = name;
+    	this.displayName = displayName;
+    }
+    
 	public String getName() {
 		return name;
 	}

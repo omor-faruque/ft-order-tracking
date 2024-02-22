@@ -37,8 +37,12 @@ public class Order {
 	@Column(name = "order_status")
 	private OrderStatus orderStatus;
 
-	@Column(name = "tracking_id")
+	
+	@Column(name = "tracking_id", unique = true)
 	private String trackingId;
+	
+	@Size(max = 200)
+	private String note;
 	
 	public Order() {}
 
@@ -88,6 +92,14 @@ public class Order {
 
 	public String getTrackingId() {
 		return trackingId;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	private void generateTrackingId() {
