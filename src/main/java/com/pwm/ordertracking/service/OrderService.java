@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pwm.ordertracking.dto.OrderStatusDTO;
 import com.pwm.ordertracking.model.Order;
 import com.pwm.ordertracking.model.OrderStatus;
 import com.pwm.ordertracking.repository.OrderRepository;
@@ -24,6 +25,15 @@ public class OrderService {
 		return orderRepository.findAll();
 	}
 
+	public OrderStatusDTO getStatusByTrackingId(String trackingId) {
+		Order order = orderRepository.findByTrackingId(trackingId);
+		
+        if (order != null) {
+            return new OrderStatusDTO(order.getOrderStatus().name(), order.getOrderStatus().getDisplayName()) ;
+        } else {
+            throw new NoSuchElementException("Order with tracking ID " + trackingId + " not found");
+        }
+	}
 	public List<Order> getOrdersWithStatus(OrderStatus status) {
 		return orderRepository.findByOrderStatus(status);
 	}

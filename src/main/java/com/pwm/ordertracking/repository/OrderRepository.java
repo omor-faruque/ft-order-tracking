@@ -9,4 +9,6 @@ import com.pwm.ordertracking.model.OrderStatus;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	List<Order> findByOrderStatus(OrderStatus status);
+
+	Order findByTrackingId(String trackingId);
 }

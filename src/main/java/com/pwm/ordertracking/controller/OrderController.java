@@ -1,5 +1,6 @@
 package com.pwm.ordertracking.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pwm.ordertracking.dto.OrderStatusDTO;
 import com.pwm.ordertracking.model.Order;
 import com.pwm.ordertracking.model.OrderStatus;
 import com.pwm.ordertracking.service.OrderService;
@@ -38,6 +40,28 @@ public class OrderController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+	}
+
+	@GetMapping("/orders/statuses")
+	public List<OrderStatusDTO> getAllOrderStatuses() {
+
+		List<OrderStatusDTO> orderStatusDTOList = new ArrayList<>();
+
+		for (OrderStatus status : OrderStatus.values()) {
+
+			OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
+
+			orderStatusDTO.setName(status.name());
+			orderStatusDTO.setDisplayName(status.getDisplayName());
+			orderStatusDTOList.add(orderStatusDTO);
+		}
+		return orderStatusDTOList;
+	}
+
+	@GetMapping("/orders/status")
+	public ResponseEntity<OrderStatusDTO> getStatusByTrackingId(@RequestParam String trackingId) {
+		OrderStatusDTO orderStatusDto = orderService.getStatusByTrackingId(trackingId);
+		return ResponseEntity.ok(orderStatusDto);
 	}
 
 	@GetMapping("/orders/{status}")
