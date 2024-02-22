@@ -40,19 +40,19 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<ErrorItem> handleNoSuchElementException(NoSuchElementException ex) {
-		ErrorItem errorItem = new ErrorItem(new Date(), ex.getMessage(), HttpStatus.NOT_FOUND);
+		ErrorItem errorItem = new ErrorItem(ex.getMessage(), HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(errorItem, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ErrorItem> handleIllegalArgumentException(IllegalArgumentException ex) {
-		ErrorItem errorItem = new ErrorItem(new Date(), ex.getMessage(), HttpStatus.BAD_REQUEST);
+		ErrorItem errorItem = new ErrorItem(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(errorItem, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorItem> globalExceptionHandler(Exception ex) {
-		ErrorItem errorItem = new ErrorItem(new Date(), ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		ErrorItem errorItem = new ErrorItem(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		return new ResponseEntity<>(errorItem, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

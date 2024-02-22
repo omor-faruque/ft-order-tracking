@@ -60,25 +60,20 @@ public class OrderController {
 	public ResponseEntity<Order> addOrder(@RequestBody Order order) {
 		return new ResponseEntity<Order>(orderService.createOrder(order), HttpStatus.CREATED);
 	}
-	
-	
+
 	@PutMapping("/orders/{orderId}")
-	public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId,  @RequestParam String status) {
+	public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam String status) {
 
-	    try {
-	        OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
-	        Order updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
-	        return ResponseEntity.ok(updatedOrder);
-	    } catch (IllegalArgumentException e) {
-	        throw new IllegalArgumentException("Invalid order status");
-	    } catch (NoSuchElementException e) {
-	        return ResponseEntity.notFound().build();
-	    }
+		try {
+			OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
+			Order updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
+			return ResponseEntity.ok(updatedOrder);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid order status");
+		} catch (NoSuchElementException e) {
+			throw new NoSuchElementException("No such order exists");
+		}
 	}
-
-	
-	
-	
 
 	@DeleteMapping("/orders/{id}")
 	public ResponseEntity<HttpStatus> deleteOrderById(@PathVariable Long id) {
