@@ -45,7 +45,10 @@ public class AuthService {
 	        throw new NoSuchElementException("No user with ID: " + id + " exists");
 	    }
 		
-		existingUser.get().getRoles().add(new Role(ERole.ROLE_ADMIN));
+		User user = existingUser.get();
+		user.getRoles().add(new Role(ERole.ROLE_ADMIN));
+		this.userRepository.save(user);
+		
 	}
 
 	public User createAdminUser(User user) {
@@ -55,6 +58,20 @@ public class AuthService {
 		return this.userRepository.save(user);
 	}
 	
+	
+	public boolean changePassword(String email, String currentPassword, String newPassword) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            
+            if (encoder.matches(currentPassword, user.getPassword())) {
+                user.setPassword(encoder.encode(newPassword));
+                userRepository.save(user);
+                return true;
+            }
+        }
+        return false;
+    }
 
 	private void checkIfUserExist(String email) {
 		if (userRepository.existsByEmail(email)) {
