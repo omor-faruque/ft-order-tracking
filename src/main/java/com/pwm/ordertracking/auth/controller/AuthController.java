@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pwm.ordertracking.auth.jwt.JwtUtils;
 import com.pwm.ordertracking.auth.jwt.TokenBlacklist;
+import com.pwm.ordertracking.auth.payloads.ChangePasswordRequest;
 import com.pwm.ordertracking.auth.payloads.MessageResponse;
 import com.pwm.ordertracking.auth.payloads.SigninRequest;
 import com.pwm.ordertracking.auth.payloads.SigninResponse;
@@ -31,13 +32,15 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = { "http://localhost:4200", "http://localhost:4201" })
 public class AuthController {
 
+	private final AuthService authService;
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtils jwtUtils;
 	private final TokenBlacklist tokenBlacklist;
 
 	@Autowired
-	public AuthController(AuthService userService, UserRepository userRepository,
+	public AuthController(AuthService authService, UserRepository userRepository,
 			AuthenticationManager authenticationManager, JwtUtils jwtUtils, TokenBlacklist tokenBlacklist) {
+		this.authService = authService;
 		this.authenticationManager = authenticationManager;
 		this.jwtUtils = jwtUtils;
 		this.tokenBlacklist = tokenBlacklist;
@@ -62,6 +65,28 @@ public class AuthController {
 			return new ResponseEntity<>(errorItem, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
+		
+		// Get authentication object
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Get UserDetails from authentication
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        
+        // Get email
+        String email = userDetails.getEmail();
+		
+
+        boolean success = authService.changePassword(email, request.getCurrentPassword(), request.getNewPassword());
+        if (success) {
+            return ResponseEntity.ok("Password changed successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to change password");
+        }
+    }
+	
 	
 	@PostMapping("/signout")
 	public ResponseEntity<MessageResponse> signout(@RequestHeader("Authorization") String token) {
