@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.pwm.ordertracking.auth.exception.UserAlreadyExistsException;
+
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
@@ -45,6 +48,12 @@ public class GlobalExceptionHandler {
         ErrorItem errorItem = new ErrorItem(errorMessage, HttpStatus.CONFLICT);
         return new ResponseEntity<>(errorItem, HttpStatus.CONFLICT);
     }
+	
+	@ExceptionHandler(UserAlreadyExistsException.class)
+	public ResponseEntity<ErrorItem> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+		ErrorItem errorItem = new ErrorItem(ex.getMessage(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorItem, HttpStatus.NOT_FOUND);
+	}
 	
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<ErrorItem> handleNoSuchElementException(NoSuchElementException ex) {
