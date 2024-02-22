@@ -1,5 +1,6 @@
 package com.pwm.ordertracking.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -25,6 +26,20 @@ public class OrderService {
 		return orderRepository.findAll();
 	}
 
+	public List<OrderStatusDTO> getAllOrderStatuses() {
+
+		List<OrderStatusDTO> orderStatusDTOList = new ArrayList<>();
+
+		for (OrderStatus status : OrderStatus.values()) {
+
+			OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
+
+			orderStatusDTO.setName(status.name());
+			orderStatusDTO.setDisplayName(status.getDisplayName());
+			orderStatusDTOList.add(orderStatusDTO);
+		}
+		return orderStatusDTOList;
+	}
 	public OrderStatusDTO getStatusByTrackingId(String trackingId) {
 		Order order = orderRepository.findByTrackingId(trackingId);
 		

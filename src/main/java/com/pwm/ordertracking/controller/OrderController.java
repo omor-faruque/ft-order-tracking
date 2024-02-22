@@ -1,6 +1,5 @@
 package com.pwm.ordertracking.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -44,18 +43,7 @@ public class OrderController {
 
 	@GetMapping("/orders/statuses")
 	public List<OrderStatusDTO> getAllOrderStatuses() {
-
-		List<OrderStatusDTO> orderStatusDTOList = new ArrayList<>();
-
-		for (OrderStatus status : OrderStatus.values()) {
-
-			OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
-
-			orderStatusDTO.setName(status.name());
-			orderStatusDTO.setDisplayName(status.getDisplayName());
-			orderStatusDTOList.add(orderStatusDTO);
-		}
-		return orderStatusDTOList;
+		return orderService.getAllOrderStatuses();
 	}
 
 	@GetMapping("/orders/status")
